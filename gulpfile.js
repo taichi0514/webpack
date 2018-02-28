@@ -2,32 +2,33 @@ const gulp = require('gulp'),
 	webpack = require('webpack'),
 	webpackStream = require('webpack-stream'),
 	webpackConfig = require('./webpack.config'),
+	babel = require('gulp-babel'),
 	gsass = require('gulp-sass'),
 	plumber = require('gulp-plumber'),
 	browserSync = require('browser-sync'),
 	changed = require('gulp-changed'),
 	cache = require('gulp-cached'),
 	progeny = require('gulp-progeny');
-	rename = require("gulp-rename"),
+rename = require("gulp-rename"),
 	htmlmin = require('gulp-htmlmin'),
 	cssmin = require('gulp-cssmin'),
 	uglify = require('gulp-uglify'),
 	phpMinify = require('@aquafadas/gulp-php-minify'),
 	sourcemaps = require("gulp-sourcemaps");
-	postcss = require('gulp-postcss'),
+postcss = require('gulp-postcss'),
 	assets = require('postcss-assets'),
 	autoprefixer = require('gulp-autoprefixer'),
 	imagemin = require('gulp-imagemin'),
 	pngquant = require('imagemin-pngquant');
 const dir = {
 	src: './htdocs/', // _srcフォルダ置き換え
-	// dist: '../sample/dist' // destフォルダ置き換え
+	dist: './htdocs/dist/' // destフォルダ置き換え
 };
 
 // ファイル監視
 gulp.task('w', function () {
 	gulp.watch(dir.src + '/**/*.html', ['reload']);
-	gulp.watch(dir.src + '/js/**/*.js', ['reload']);
+	gulp.watch(dir.src + '/js/**/*.js', ['webpack', 'reload']);
 	gulp.watch(dir.src + '/scss/**/*.scss', ['postcss']);
 });
 
@@ -69,7 +70,7 @@ gulp.task('postcss', function () {
 		}))
 		.pipe(postcss([
 			assets({
-				loadPaths: [dir.src + 'img/'],	//対象ディレクトリ
+				loadPaths: [dir.src + 'img/'], //対象ディレクトリ
 				relative: true, // 相対パス
 				// basePath: dir.src, // ルート相対パス
 			})
@@ -84,19 +85,24 @@ gulp.task('postcss', function () {
 gulp.task('imagemin', function () {
 	gulp.src([dir.src + '/img/**/*'])
 		.pipe(imagemin(
-			[pngquant({ quality: '65-80', speed: 1 })]
+			[pngquant({
+				quality: '65-80',
+				speed: 1
+			})]
 		))
 		.pipe(imagemin()) // ←追加
-		.pipe(gulp.dest('./htdocs_minify/minify/img'));
+		.pipe(gulp.dest(dir.dist + 'img'));
 });
 
 
 gulp.task('minify-html', function () {
 	//html
 	return gulp.src(dir.src + '/**/*.html')
-		.pipe(htmlmin({ collapseWhitespace: true }))
+		.pipe(htmlmin({
+			collapseWhitespace: true
+		}))
 		// .pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest('./htdocs_minify/minify/'));
+		.pipe(gulp.dest(dir.dist));
 });
 
 gulp.task('minify-css', function () {
@@ -104,37 +110,30 @@ gulp.task('minify-css', function () {
 	return gulp.src(dir.src + '/**/*.css')
 		.pipe(cssmin())
 		// .pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest('./htdocs_minify/minify/css'));
+		.pipe(gulp.dest(dir.dist + 'css'));
 });
 
 gulp.task('minify-js', function () {
-	//js
+	//jsgul
 	return gulp.src(dir.src + '/**/*.js')
 		.pipe(uglify())
 		// .pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest('./htdocs_minify/minify/js'));
+		.pipe(gulp.dest(dir.dist +  'js'));
 });
-
-// gulp.task('minify-php', () => gulp.src(dir.src + '/**/*.php', {read: false})
-// 	//php
-//   .pipe(phpMinify())
-//   .pipe(gulp.dest('./htdocs_minify/minify/php'))
-// );
 
 //webpack
 gulp.task('webpack', function () {
 	webpackStream(webpackConfig, webpack)
-	.pipe(plumber({
-		errorHandler: function (err) {
-			console.log(err.messageFormatted);
-			this.emit('end');
-		}
-	}))
-		.pipe(gulp.dest('./htdocs/js/'));    // 出力先のフォルダを相対パスで指定する
+		.pipe(plumber({
+			errorHandler: function (err) {
+				console.log(err.messageFormatted);
+				this.emit('end');
+			}
+		}))
 });
 
 
 // 実行
 gulp.task('default', ["w", "server"]);
 //minify コマンド
-gulp.task('minify', ['minify-html', 'minify-css', 'minify-js' , 'imagemin']);
+gulp.task('minify', ['minify-html', 'minify-css', 'minify-js', 'imagemin']);

@@ -13,6 +13,8 @@ module.exports = {
 
   devServer: {
     contentBase: 'htdocs',
+    inline: false,
+    open: true,
   },
 
   module: {

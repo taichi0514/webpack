@@ -1,7 +1,7 @@
 {
-  "name": "template",
+  "name": "webpack",
   "version": "1.0.0",
-  "main": "gulpfile.js",
+  "main": "webpack",
   "author": "Taichi.Murai",
   "scripts": {},
   "devDependencies": {

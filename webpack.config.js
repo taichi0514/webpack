@@ -8,9 +8,13 @@ module.exports = {
     path: path.resolve(__dirname, 'htdocs/dist/js'),
     filename: 'bundle.js'
   },
+
+  devtool: 'source-map',
+
   devServer: {
     contentBase: 'htdocs',
   },
+
   module: {
     rules: [
       {

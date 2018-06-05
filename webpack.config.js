@@ -1,26 +1,28 @@
 const webpack = require("webpack"),
-UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+  UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var path = require('path');
 
 module.exports = {
-  entry: __dirname + "/htdocs/js/app.js", //ビルドするファイル
-  entry: {
-    // "vendor":['jquery'],
-    "bundle": __dirname + '/htdocs/js/app.js'
-    // "profile": __dirname +'/htdocs/js/components.js',
-  },
+  entry: "./htdocs/js/app.js", //ビルドするファイル
   output: {
-    path: __dirname + '/htdocs/js/', //ビルドしたファイルを吐き出す場所
-    filename: '[name].js' //ビルドした後のファイル名
+    path: path.resolve(__dirname, 'htdocs/dist/js'),
+    filename: 'bundle.js'
   },
-  devtool: 'source-map',
-  plugins: [
-    new UglifyJsPlugin({
-      sourceMap: true
-    })
-  ],
+  devServer: {
+    contentBase: 'htdocs',
+  },
   module: {
-    loaders: [
-      //loader
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [`@babel/preset-env`]
+          }
+        }
+      }
     ]
   }
 };

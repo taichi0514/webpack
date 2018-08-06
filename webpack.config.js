@@ -6,15 +6,17 @@ module.exports = {
   entry: "./htdocs/js/app.js", //ビルドするファイル
   output: {
     path: path.resolve(__dirname, 'htdocs/dist/js'),
+    publicPath: '/js/',
     filename: 'bundle.js'
   },
 
   devtool: 'source-map',
 
   devServer: {
-    contentBase: 'htdocs',
-    inline: false,
+    contentBase: path.resolve(__dirname, "htdocs"),
+    watchContentBase: true,
     open: true,
+    hot: true
   },
 
   module: {

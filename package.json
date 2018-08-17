@@ -5,7 +5,7 @@
   "scripts": {
     "prod": "npx webpack --mode production",
     "dev": "npx webpack --mode development -w",
-    "devServer": "npx webpack-dev-server --mode development -w"
+    "devServer": "npx webpack-dev-server --hot --inline --mode development -w"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.49",

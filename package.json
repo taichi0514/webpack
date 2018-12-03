@@ -8,14 +8,14 @@
     "devServer": "npx webpack-dev-server --mode development -w"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.49",
-    "@babel/preset-env": "^7.0.0-beta.49",
-    "babel-loader": "^8.0.0-beta.3",
-    "jquery": "^3.3.1",
-    "uglifyjs-webpack-plugin": "^1.2.5",
-    "webpack": "^4.10.2",
-    "webpack-cli": "^3.0.2",
-    "webpack-dev-server": "^3.1.4",
-    "webpack-stream": "^4.0.3"
+    "@babel/core": "7.0.0-beta.49",
+    "@babel/preset-env": "7.0.0-beta.49",
+    "babel-loader": "8.0.0-beta.3",
+    "jquery": "3.3.1",
+    "uglifyjs-webpack-plugin": "1.2.5",
+    "webpack": "4.10.2",
+    "webpack-cli": "3.0.2",
+    "webpack-dev-server": "3.1.4",
+    "webpack-stream": "4.0.3"
   }
 }
